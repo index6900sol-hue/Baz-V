@@ -1,178 +1,101 @@
-# 🚀 BAZ Fund Manager - Quick Reference
+# ⚡ 5-Minute Quick Start
 
-## ⚡ 60-Second Setup
+Get BAZ Autonomous Fund Manager running in 5 minutes.
+
+## Step 1: Setup (2 min)
 
 ```bash
-# 1. Create environment file
-echo 'BINANCE_API_KEY=your_key
-BINANCE_API_SECRET=your_secret
-OPENAI_API_KEY=sk-...
-USE_OPENCLAW=true
-WORKER_INTERVAL_MINUTES=15' > .env.local
+# Clone or navigate to project
+cd /workspaces/Baz-V
 
-# 2. Install dependencies
+# Create environment file
+cat > .env.local << EOF
+BINANCE_API_KEY=your_api_key
+BINANCE_API_SECRET=your_api_secret
+ENGINE=openclaw
+WORKER_INTERVAL_MINUTES=60
+EOF
+
+# Install dependencies
 npm install
+```
 
-# 3. Start dashboard (Terminal 1)
+## Step 2: Start Dashboard (1 min)
+
+```bash
 npm run dev
+```
 
-# 4. Start worker (Terminal 2)
+Open browser: **http://localhost:3000**
+
+You should see:
+- Portfolio value: $0 (needs funding)
+- Benchmark comparison
+- "Execute Trading Cycle Now" button
+
+## Step 3: Start Worker (1 min)
+
+In a **new terminal**:
+```bash
 npm run worker
-
-# 5. Deposit USDT and visit http://localhost:3000
 ```
 
+You should see:
+```
+═══════════════════════════════════════════
+🤖 BAZ AUTONOMOUS FUND MANAGER WORKER
+═══════════════════════════════════════════
+🚀 Worker started...
+⏱️  Trading cycle interval: 60 minutes
+```
+
+## Step 4: Fund Your Account (1 min)
+
+1. Go to [Binance.com](https://binance.com)
+2. Send USDT to your wallet address
+3. Wait for confirmation
+
+## ✅ Done!
+
+AI will start trading within 60 minutes. Watch the dashboard for:
+
+- 💰 Portfolio value increasing
+- 📈 Performance vs benchmarks
+- 💹 Executed trades in History tab
+- 🧠 AI engine decisions
+
 ---
 
-## 📊 Dashboard Features
+## 🔧 Troubleshooting
 
-| Feature | Location | Purpose |
-|---------|----------|---------|
-| Portfolio Value | Top Left Card | Current USD value |
-| Outperformance | Top Card | % vs S&P 500 |
-| Holdings Count | Top Card | # of assets |
-| System Status | Top Right Card | Live indicator |
-| Execute Button | Top Section | Trigger fund manager |
-| Overview Tab | Main | Holdings & benchmarks |
-| Performance Tab | Main | Benchmark metrics |
-| History Tab | Main | Recent cycles |
-
----
-
-## 🔗 API Quick Reference
-
-### Get Status
+### Dashboard not loading?
 ```bash
-curl http://localhost:3000/api/status
-# Returns: portfolio, benchmarks, performance
+# Check port 3000
+lsof -i :3000
 ```
 
-### Trigger Fund Manager
-```bash
-curl -X POST http://localhost:3000/api/trade
-# Manually execute one cycle
-```
+### Worker not running?
+Check terminal for errors. Common issues:
+- BINANCE_API_KEY not set
+- npm not installed
+- Port conflict
 
-### Get History
-```bash
-curl http://localhost:3000/api/fund-manager?section=history
-# Returns: last 10 cycles
-```
-
-### Get Performance Data
-```bash
-curl http://localhost:3000/api/fund-manager?section=performance
-# Returns: performance metrics
-```
-
-### Get Summary
-```bash
-curl http://localhost:3000/api/fund-manager?section=summary
-# Returns: latest cycle + total cycles
-```
+### No trades executing?
+Reasons:
+1. No USDT balance
+2. No assets beat benchmarks
+3. Low conviction (wait for next cycle)
+4. API issues
 
 ---
 
-## ⚙️ Environment Variables
+## 📊 Next Steps
 
-| Variable | Default | Purpose |
-|----------|---------|---------|
-| `BINANCE_API_KEY` | (required) | Binance authentication |
-| `BINANCE_API_SECRET` | (required) | Binance authentication |
-| `OPENAI_API_KEY` | (optional) | OpenAI GPT-4 access |
-| `USE_OPENCLAW` | true | Use OpenClaw AI |
-| `ENGINE` | openclaw | Primary AI engine |
-| `WORKER_INTERVAL_MINUTES` | 15 | Cycle frequency |
-| `ALLOCATION_PERCENT` | 70 | Growth allocation |
-| `STABLE_PERCENT` | 30 | Stable allocation |
-| `RISK_PROFILE` | balanced | Risk level |
+1. **Monitor Daily** - Check dashboard first week
+2. **Review Settings** - Adjust data/settings.json if needed
+3. **Increase Funding** - Add more USDT gradually
+4. **Read Docs** - See AUTONOMOUS_TRADING_GUIDE.md
 
 ---
 
-## 📈 Benchmarks Tracked
-
-| Index | Type | Target |
-|-------|------|--------|
-| IHSG | Indonesian Stock | BEAT |
-| S&P 500 | US Stock | BEAT |
-| Gold | Commodity | BEAT |
-| Bitcoin | Crypto | BEAT (hard) |
-| Top 100 Crypto | Market Index | BEAT (hard) |
-| USD/IDR | Currency | BEAT |
-
----
-
-## 💡 Key Files
-
-| File | Purpose |
-|------|---------|
-| `lib/fundManagerV2.js` | Core fund manager logic |
-| `app/api/status/route.js` | Portfolio status endpoint |
-| `app/api/trade/route.js` | Trade execution endpoint |
-| `app/api/fund-manager/route.js` | History & performance |
-| `worker/tradingWorker.js` | Autonomous worker process |
-| `app/page.js` | Dashboard UI |
-| `.env.local` | Configuration (create this!) |
-
----
-
-## 🎯 Typical Day
-
-**09:00** - Deploy system & deposit $1,000 USDT
-**09:15** - Fund manager executes first cycle (buys $700 of assets)
-**10:00** - Check dashboard, sees $1,008 portfolio
-**12:00** - Fund manager rebalances
-**15:00** - Check performance vs benchmarks
-**18:00** - Review monthly report
-
----
-
-## 🚨 Common Issues & Fixes
-
-| Issue | Fix |
-|-------|-----|
-| "No USDT found" | Deposit to Binance, wait 5 min |
-| "API Key Error" | Check `.env.local` file |
-| "Port 3000 in use" | `lsof -i :3000` and kill process |
-| "Trades not executing" | Verify Binance trading enabled |
-| "Worker not logging" | Check terminal output for errors |
-| "Empty holdings" | Wait for first cycle (15 min) |
-
----
-
-## 📊 Expected Returns
-
-| Timeframe | Expected | Note |
-|-----------|----------|------|
-| Week 1 | ±5% | Market testing |
-| Month 1 | +5-15% | Strategy finding |
-| Quarter 1 | +15-40% | Optimization |
-| Year 1 | +50-200% | Mature strategy |
-
-**Disclaimer:** Past performance ≠ future results
-
----
-
-## 🔒 Security Reminders
-
-- ⚠️ Keep `.env.local` secret
-- ⚠️ Use IP whitelist on Binance
-- ⚠️ Enable 2FA on Binance
-- ⚠️ Use bot-only Binance account
-- ⚠️ Check permissions read-only + trading
-- ⚠️ Set withdrawal restrictions
-
----
-
-## 📞 Emergency Contacts
-
-- Binance Support: https://www.binance.com/support
-- OpenAI Status: https://status.openai.com
-- System Logs: Check terminal where npm run worker runs
-- API Status: GET http://localhost:3000/api/status
-
----
-
-**System Status:** ✅ Ready to trade 24/7
-**Last Updated:** 2024-06-09
-**Version:** BAZ Fund Manager V2
+**Full docs: [README.md](README.md)**
